@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+}
+
+group = 'com.shortestpath'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.10.1'
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+javafx {
+    version = '17.0.2'
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+application {
+    mainClass = 'main.java.com.shortestpath.Main'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// Ensure resources are copied to build directory
+processResources {
+    from 'src/main/resources'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// Create output directory for generated images
+tasks.register('createOutputDir') {
+    doLast {
+        mkdir 'output'
+    }
+}
+
+build.dependsOn createOutputDir
